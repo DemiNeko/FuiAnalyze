@@ -1,0 +1,261 @@
+{
+  "formatVersion": 1,
+  "architecture": "Conv8(3) → Pool2 → Conv16(3) → Pool2 → Dense64 → Dense10",
+  "dataset": "MNIST",
+  "datasetUrl": "https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz",
+  "datasetSha256": "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1",
+  "seed": 42,
+  "trainSize": 55000,
+  "validationSize": 5000,
+  "testSize": 10000,
+  "epochs": 8,
+  "selectedEpoch": 7,
+  "parameters": 27562,
+  "testAccuracy": 0.9842,
+  "testCorrect": 9842,
+  "validationAccuracy": 0.982,
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 0.58586,
+      "validationAccuracy": 0.9494
+    },
+    {
+      "epoch": 2,
+      "loss": 0.18788,
+      "validationAccuracy": 0.9658
+    },
+    {
+      "epoch": 3,
+      "loss": 0.14361,
+      "validationAccuracy": 0.9742
+    },
+    {
+      "epoch": 4,
+      "loss": 0.12498,
+      "validationAccuracy": 0.9746
+    },
+    {
+      "epoch": 5,
+      "loss": 0.10976,
+      "validationAccuracy": 0.9766
+    },
+    {
+      "epoch": 6,
+      "loss": 0.09852,
+      "validationAccuracy": 0.9792
+    },
+    {
+      "epoch": 7,
+      "loss": 0.09127,
+      "validationAccuracy": 0.982
+    },
+    {
+      "epoch": 8,
+      "loss": 0.08275,
+      "validationAccuracy": 0.9786
+    }
+  ],
+  "confusionMatrix": [
+    [
+      971,
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      1,
+      2,
+      0
+    ],
+    [
+      0,
+      1127,
+      1,
+      1,
+      0,
+      0,
+      2,
+      1,
+      3,
+      0
+    ],
+    [
+      1,
+      3,
+      1013,
+      3,
+      1,
+      0,
+      0,
+      6,
+      5,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1000,
+      0,
+      5,
+      0,
+      1,
+      4,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      973,
+      0,
+      3,
+      1,
+      0,
+      4
+    ],
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      883,
+      2,
+      1,
+      0,
+      0
+    ],
+    [
+      3,
+      2,
+      0,
+      1,
+      2,
+      4,
+      946,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      3,
+      4,
+      4,
+      0,
+      0,
+      0,
+      1007,
+      3,
+      7
+    ],
+    [
+      5,
+      0,
+      3,
+      2,
+      6,
+      5,
+      1,
+      2,
+      948,
+      2
+    ],
+    [
+      0,
+      4,
+      1,
+      4,
+      9,
+      7,
+      0,
+      1,
+      9,
+      974
+    ]
+  ],
+  "layers": [
+    {
+      "name": "conv1.weight",
+      "shape": [
+        8,
+        1,
+        3,
+        3
+      ],
+      "offset": 0,
+      "length": 72
+    },
+    {
+      "name": "conv1.bias",
+      "shape": [
+        8
+      ],
+      "offset": 72,
+      "length": 8
+    },
+    {
+      "name": "conv2.weight",
+      "shape": [
+        16,
+        8,
+        3,
+        3
+      ],
+      "offset": 80,
+      "length": 1152
+    },
+    {
+      "name": "conv2.bias",
+      "shape": [
+        16
+      ],
+      "offset": 1232,
+      "length": 16
+    },
+    {
+      "name": "fc1.weight",
+      "shape": [
+        64,
+        400
+      ],
+      "offset": 1248,
+      "length": 25600
+    },
+    {
+      "name": "fc1.bias",
+      "shape": [
+        64
+      ],
+      "offset": 26848,
+      "length": 64
+    },
+    {
+      "name": "fc2.weight",
+      "shape": [
+        10,
+        64
+      ],
+      "offset": 26912,
+      "length": 640
+    },
+    {
+      "name": "fc2.bias",
+      "shape": [
+        10
+      ],
+      "offset": 27552,
+      "length": 10
+    }
+  ],
+  "weightsSha256": "dcf3e64aa0ef9a4b14784af3d0ecc22a2b741b16627f03e044c615ae8124d683",
+  "versions": {
+    "torch": "2.9.0+cpu",
+    "numpy": "2.1.3"
+  },
+  "preprocessing": "28x28 grayscale, white digit on black, pixels / 255"
+}

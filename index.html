@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5f0">
+  <meta name="description" content="Нарисуй цифру и загляни внутрь нейросети. Интерактивный учебный проект: настоящая CNN, MNIST и распознавание прямо в браузере.">
+  <title>НейроЦифра — загляни внутрь ИИ</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+  <header class="header wrap">
+    <a class="brand" href="#" aria-label="НейроЦифра — на главную"><span class="brand-mark" aria-hidden="true">n<span>°</span></span>нейроцифра<span class="brand-dot">.</span></a>
+    <nav aria-label="Навигация"><a href="#lab">Лаборатория</a><a href="#inside">Как это работает</a><a class="nav-about" href="#about">К защите <span aria-hidden="true">↗</span></a></nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <div>
+        <p class="eyebrow"><span class="tiny-cross" aria-hidden="true">✳</span> МАЛЕНЬКИЙ ЭКСПЕРИМЕНТ С НАСТОЯЩИМ ИИ</p>
+        <h1 id="title">Твой почерк.<br><span>Взгляд нейросети.</span></h1>
+        <p class="hero-copy">Нарисуй цифру от 0 до 9. Посмотри, как обычные<br class="desktop-break"> пиксели превращаются в предсказание.</p>
+      </div>
+      <div class="hero-note"><span class="note-orbit" aria-hidden="true">28<span>× 28</span></span><p>Всего 784 пикселя.<br>Достаточно, чтобы узнать цифру.</p><span class="local-badge"><i></i> Всё происходит в твоём браузере</span></div>
+    </section>
+
+    <section class="lab" id="lab" aria-label="Лаборатория распознавания">
+      <div class="lab-top"><p><span class="section-index">01</span> ПОПРОБУЙ САМ</p><span id="model-status" class="status" role="status">Загружаем модель…</span></div>
+      <div id="load-error" class="load-error" role="alert" hidden><span>Не удалось загрузить модель. Проверь соединение и открой страницу через локальный сервер или GitHub Pages.</span><button id="retry" type="button">Повторить</button></div>
+      <div class="lab-grid">
+        <article class="draw-panel">
+          <div class="panel-heading"><h2>Холст</h2><span>Мышь или палец</span></div>
+          <div class="canvas-wrap">
+            <canvas id="drawing" width="336" height="336" tabindex="0" aria-label="Холст для рисования одной цифры. Также можно выбрать готовый пример ниже."></canvas>
+            <div class="canvas-placeholder" id="placeholder"><span class="draw-symbol" aria-hidden="true">✎</span><strong>Здесь начинается магия</strong><span>Нарисуй одну крупную цифру</span></div>
+            <span class="canvas-corner" aria-hidden="true">INPUT / 0–9</span>
+          </div>
+          <div class="draw-actions"><button class="icon-button" id="undo" type="button" aria-label="Отменить последний штрих" title="Отменить последний штрих" disabled>↶</button><button class="secondary-button" id="clear" type="button">Очистить</button><button class="primary-button" id="recognize" type="button" disabled>Распознать <span aria-hidden="true">↗</span></button></div>
+          <div class="examples"><p>Или возьми пример из MNIST <span title="Повторное нажатие показывает следующий образец">↻</span></p><div id="example-buttons" class="example-buttons" aria-label="Готовые примеры цифр"></div></div>
+          <p class="input-message" id="input-message" role="status">Рисуй по центру, не касаясь краёв холста.</p>
+        </article>
+
+        <article class="result-panel">
+          <div class="panel-heading"><h2>Что думает нейросеть</h2><span class="model-tag">CNN / MNIST</span></div>
+          <div class="prediction" aria-live="polite" aria-atomic="true"><div id="result-digit" class="result-digit">?</div><div class="prediction-info"><p id="result-caption">Пока чистый лист</p><strong id="result-score">Твой ход</strong><span id="result-detail">Нарисуй цифру или выбери пример</span></div><span class="result-spark" aria-hidden="true">✳</span></div>
+          <div class="probability-title"><h3>Оценки всех вариантов</h3><span id="inference-time">0–9</span></div>
+          <div id="probabilities" class="probabilities" aria-label="Оценки модели для цифр от нуля до девяти"></div>
+          <p class="score-note">Проценты — оценки модели, а не гарантия правильного ответа. Незнакомый рисунок тоже может получить высокий балл.</p>
+          <div class="result-footer"><span><i></i> Рисунок остаётся на устройстве</span><span>Без API и регистрации</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="inside section-space" id="inside" aria-labelledby="inside-title">
+      <div class="section-heading"><div><p class="eyebrow"><span class="section-index">02</span> ПО ТУ СТОРОНУ ОТВЕТА</p><h2 id="inside-title">Не магия. Математика.</h2></div><p>Вот путь твоего рисунка через сеть.<br>Визуализации обновляются после распознавания.</p></div>
+      <div class="pipeline">
+        <article class="pipeline-card"><div class="step-label"><span>01 / ВХОД</span><span>784 числа</span></div><div class="stage-visual"><canvas id="input-preview" width="112" height="112" aria-label="Изображение 28 на 28 пикселей, которое получает модель"></canvas><div class="pixel-label">28<br><span>×</span><br>28</div></div><h3>Сжимаем рисунок</h3><p>Вписываем цифру в 20 × 20, центрируем на поле 28 × 28. Яркость каждого пикселя — число от 0 до 1.</p></article>
+        <article class="pipeline-card"><div class="step-label"><span>02 / ПРИЗНАКИ</span><span>Свертки + ReLU</span></div><div class="stage-visual feature-grid" id="feature-maps" aria-label="Четыре карты активаций первого сверточного слоя"></div><h3>Находим детали</h3><p>Фильтры 3 × 3 реагируют на штрихи и изгибы. Здесь — 4 из 8 реальных карт первого слоя, каждая в своём масштабе.</p></article>
+        <article class="pipeline-card"><div class="step-label"><span>03 / СВЯЗИ</span><span>64 нейрона</span></div><div class="stage-visual"><div class="neuron-grid" id="neurons" aria-label="Активации 64 нейронов полносвязного слоя"></div></div><h3>Собираем картину</h3><p>Второй слой ищет сочетания признаков. После уменьшения карт 64 нейрона объединяют их в общий образ.</p></article>
+        <article class="pipeline-card final-stage"><div class="step-label"><span>04 / ВЫХОД</span><span>Softmax</span></div><div class="stage-visual"><span class="output-symbol" id="pipeline-result">?</span><span class="output-arrow" aria-hidden="true">↗</span></div><h3>Выбираем цифру</h3><p>Получаем 10 оценок с суммой 100%. Цифра с самой высокой оценкой становится ответом сети.</p></article>
+      </div>
+    </section>
+
+    <section class="about section-space" id="about" aria-labelledby="about-title">
+      <div class="about-intro"><p class="eyebrow"><span class="section-index">03</span> ЧТО РАССКАЗАТЬ НА ЗАЩИТЕ</p><h2 id="about-title">Маленькая модель.<br>Полный цикл обучения.</h2><p>Это сверточная нейронная сеть, обученная на рукописных цифрах MNIST. Python обучает модель, а JavaScript использует её веса для предсказания.</p><a href="./DEFENSE.md" class="text-link">Шпаргалка для защиты <span aria-hidden="true">↗</span></a></div>
+      <div class="model-facts"><div class="fact"><strong id="accuracy">—</strong><span>точность на 10 000 тестовых цифр MNIST</span></div><div class="fact"><strong>55 000</strong><span>примеров для обучения + 5 000 для валидации</span></div><div class="fact"><strong id="parameter-count">—</strong><span>обучаемых параметров в компактной CNN</span></div><p>Тестовые цифры не используются при обучении или выборе модели. На твоих рисунках точность может отличаться.</p></div>
+      <div class="faq"><details><summary>Как нейросеть учится?</summary><p>Мы показываем ей изображения с правильными ответами. Сеть делает предсказание, функция потерь измеряет ошибку, обратное распространение вычисляет градиенты, а Adam корректирует веса. За несколько эпох ошибка уменьшается. Лучшую эпоху выбираем по отдельной валидационной выборке.</p></details><details><summary>Почему она иногда ошибается?</summary><p>MNIST содержит цифры в определённом стиле. Необычный почерк, слишком толстые линии, несколько цифр или рисунок предмета отличаются от обучающих данных. Эта модель всегда выбирает одну из десяти цифр — отдельного класса «не цифра» у неё нет.</p></details><details><summary>Что именно сделано в проекте?</summary><p>Подготовка данных, обучение CNN с небольшими поворотами и сдвигами изображений, проверка на отдельном тесте, экспорт весов, вычисления сети на чистом JavaScript, холст и визуализация промежуточных активаций. Код обучения и результаты эксперимента входят в репозиторий.</p></details></div>
+    </section>
+  </main>
+  <footer class="footer wrap"><a class="brand footer-brand" href="#">нейроцифра.</a><span>Учебный проект по искусственному интеллекту</span><a href="https://github.com/DemiNeko/FuiAnalyze" target="_blank" rel="noopener noreferrer">Код на GitHub ↗</a><a href="./README.md">Документация ↗</a></footer>
+  <noscript><div class="no-script">Для рисования и работы нейросети включи JavaScript в браузере.</div></noscript>
+</body>
+</html>
